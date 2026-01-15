@@ -5,9 +5,7 @@ from selene import have
 
 
 def test_automation_form(browser):
-    browser.config.timeout = 10
-    browser.driver.set_window_size(1920, 1080)
-
+    # Открываем браузер
     browser.open('/automation-practice-form')
 
     # 1. Заполняем имя и фамилию
