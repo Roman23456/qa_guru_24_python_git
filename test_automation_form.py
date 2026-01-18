@@ -1,12 +1,14 @@
-
+import os
 import pytest
-
 from selene import have
 
 
 def test_automation_form(browser):
     # Открываем браузер
     browser.open('/automation-practice-form')
+
+    browser.driver.execute_script("$('#fixedban').remove()")
+    browser.driver.execute_script("$('footer').remove()")
 
     # 1. Заполняем имя и фамилию
     browser.element('#firstName').type('Иван')
@@ -19,11 +21,7 @@ def test_automation_form(browser):
     browser.element('[for="gender-radio-1"]').click()
 
     # 4. Вводим номер телефона
-    browser.element('#userNumber').type('79889958765')
-    if browser.element == str:
-        print('Введите цифры')
-    else:
-        print('Вы ввели правильное значение')
+    browser.element('#userNumber').type('7988995876')
 
     # 5. Выбираем дату рождения через календарь
     browser.element('#dateOfBirthInput').click()
@@ -53,7 +51,7 @@ def test_automation_form(browser):
     browser.element('[for="hobbies-checkbox-3"]').click()
 
     # Загружаем файл
-    browser.element('#uploadPicture').set_value('/Users/tochkamac/qa_guru_24_python_git/test/test 3.pdf')
+    browser.element('#uploadPicture').set_value(os.path.abspath('image/test 3.pdf'))  # Путь к файлу
 
     # Записываем адрес
     browser.element('#currentAddress').type('г. Рязань, ул. Жмайлова, д. 19')
@@ -69,6 +67,18 @@ def test_automation_form(browser):
 
     # Проверка модалки с подтверждением
     browser.element('.modal-content').should(have.text('Thanks for submitting the form'))
+
+    # Проверяем заполненные поля в модальном окне
+    browser.element('.table-responsive').should(have.text('Иван Иванович'))
+    browser.element('.table-responsive').should(have.text('ivan_ivanovich@gmail.com'))
+    browser.element('.table-responsive').should(have.text('Male'))
+    browser.element('.table-responsive').should(have.text('7988995876'))
+    browser.element('.table-responsive').should(have.text('12 August,1994'))
+    browser.element('.table-responsive').should(have.text('Computer Science'))
+    browser.element('.table-responsive').should(have.text('Music'))
+    browser.element('.table-responsive').should(have.text('test 3.pdf'))
+    browser.element('.table-responsive').should(have.text('г. Рязань, ул. Жмайлова, д. 19'))
+    browser.element('.table-responsive').should(have.text('Haryana Panipat'))
 
     # Закрываем модалку
     browser.element('#closeLargeModal').click()
